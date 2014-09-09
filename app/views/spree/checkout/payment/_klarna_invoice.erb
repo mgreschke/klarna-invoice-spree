@@ -1,0 +1,42 @@
+<h2> Ihre Rechnungsdaten </h2>
+<%= render :partial => 'spree/shared/address', :locals => { :address => @order.bill_address } %>
+<h6><%= Spree.t(:billing_address) %> <%= link_to "(#{Spree.t(:edit)})", checkout_state_path(:address) unless @order.completed? %></h6>
+
+<%if payment_method.birthday_required?(@order.bill_address.country.iso) %>
+    <p class="field" data-hook="birthday">
+      <%= label_tag "birthday", Spree.t(:birthday) %><span class="required">*</span><br />
+      <%= text_field_tag "birthday_d", '', :id => 'birthday', :class => "required birthday", :placeholder => "DD", :maxlength=>2, style:"width: 35px" %>
+      <%= text_field_tag "birthday_m", '', :id => 'birthday', :class => "required birthday", :placeholder => "MM", style:"width: 35px" %>
+      <%= text_field_tag "birthday_y", '', :id => 'birthday', :class => "required birthday", :placeholder => "YYYY", style:"width: 50px" %>
+    </p>
+<% elsif payment_method.sn_required?(@order.bill_address.country.iso) %>
+    <p class="field" data-hook="p_no">
+      <%= label_tag "p_no", Spree.t(:social_number) %><span class="required">*</span><br />
+      <%= text_field_tag "p_no", '', :id => 'p_no', :class => "required p_no" %>
+    </p>
+
+<% end %>
+<%if payment_method.gender_required?(@order.bill_address.country.iso) %>
+    <p class="field" data-hook="gender">
+      <%= label_tag "Geburtsdatum", Spree.t(:gender) %><span class="required">*</span><br />
+      <%= t(:male) %><%= radio_button_tag "gender", '1'  %>
+      <%= t(:female) %><%= radio_button_tag "gender", '0' %>
+    </p>
+<% end %>
+<p class="field checkbox" data-hook="accept_agb">
+  <%= check_box_tag 'accept_agb', '1', true %>
+  <%= label_tag :accept_agb, "Ich aktzeptiere die AGB von Delighto und Klarna", :id => 'accept_agb' %>
+  <span id="invoicexx"></span>
+</p>
+<script src="https://cdn.klarna.com/public/kitt/core/v1.0/js/klarna.min.js"></script>
+<script src="https://cdn.klarna.com/public/kitt/toc/v1.1/js/klarna.terms.min.js"></script>
+<script type="text/javascript">
+new Klarna.Terms.Invoice({
+    el: 'invoicexx',
+    eid: '<%= payment_method.preferred_id %>',
+    locale: '<%= payment_method.locale(@order) %>',
+    charge: <%= @order.total %>,
+    type: 'desktop'
+});
+</script>
+

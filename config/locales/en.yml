@@ -1,0 +1,18 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+en:
+  spree:
+    hello: "Hello world"
+    birthday: "Birthday"
+    social_number: "Social Number"
+    gender: "Gender"
+    male: "Male"
+    female: "Female"
+    accept_agb: "Accept Terms"
+    agb_must_be_accepted: "Terms must be accepted"
+    social_no_cannot_be_empty: "Social number cannot be empty"
+    birthday_wrong_value: "Wrong birthday date"
+    gender_cannot_be_empty: "Gender cannot be empty"
+
+
